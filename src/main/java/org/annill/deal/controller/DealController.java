@@ -21,7 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class DealController {
     private DealService dealService;
 
-
+    @PatchMapping("/change/status")
+    public ResponseEntity<DealDto> changeDealStatus(@RequestParam UUID dealId,
+        @RequestParam String newStatus) {
+        return dealService.changeStatus(dealId, newStatus)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 
     @GetMapping("/{id}")
@@ -30,7 +36,6 @@ public class DealController {
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-
-
+    
 
 }
