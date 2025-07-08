@@ -36,6 +36,10 @@ public class DealController {
             .map(ResponseEntity::ok)
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
-    
+
+    @PutMapping("/save")
+    public ResponseEntity<DealDtoSave> saveDeal(@RequestParam DealDtoSave dealDtoSave) {
+        return null;
+    }
 
 }

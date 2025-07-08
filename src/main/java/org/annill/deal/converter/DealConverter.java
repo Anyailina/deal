@@ -70,5 +70,51 @@ public class DealConverter {
             .setDealContractorList(dealContractorList);
     }
 
+    public DealDtoSave toSaveDto(Deal deal) {
 
+        List<DealSumDto> dealSumDtoList = deal
+            .getDealSumList().stream()
+            .map(dealSumConverter::toDto).toList();
+
+        List<DealContractorDto> dealContractorDtoList = deal
+            .getDealContractorList().stream()
+            .map(dealContractorConverter::toDto)
+            .toList();
+
+        return new DealDtoSave()
+            .setId(deal.getId())
+            .setDescription(deal.getDescription())
+            .setAgreementNumber(deal.getAgreementNumber())
+            .setAgreementDate(deal.getAgreementDate())
+            .setAgreementStartDt(deal.getAgreementStartDt())
+            .setAvailabilityDate(deal.getAvailabilityDate())
+            .setCloseDt(deal.getCloseDt())
+            .setDealTypeDto(dealTypeConverter.toDto(deal.getType()))
+            .setDealSumDtoList(dealSumDtoList)
+            .setDealContractorDtoList(dealContractorDtoList);
+    }
+
+    public Deal toEntity(DealDtoSave dealDto) {
+
+        List<DealSum> dealSumList = dealDto
+            .getDealSumDtoList().stream()
+            .map(dealSumConverter::toEntity).toList();
+
+        List<DealContractor> dealContractorList = dealDto
+            .getDealContractorDtoList().stream()
+            .map(dealContractorConverter::toEntity)
+            .toList();
+
+        return new Deal()
+            .setId(dealDto.getId())
+            .setDescription(dealDto.getDescription())
+            .setAgreementNumber(dealDto.getAgreementNumber())
+            .setAgreementDate(dealDto.getAgreementDate())
+            .setAgreementStartDt(dealDto.getAgreementStartDt())
+            .setAvailabilityDate(dealDto.getAvailabilityDate())
+            .setCloseDt(dealDto.getCloseDt())
+            .setType(dealTypeConverter.toEntity(dealDto.getDealTypeDto()))
+            .setDealSumList(dealSumList)
+            .setDealContractorList(dealContractorList);
+    }
 }

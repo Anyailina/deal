@@ -1,5 +1,6 @@
 package org.annill.deal.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import org.annill.deal.converter.DealConverter;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.entity.Deal;
+import org.annill.deal.entity.DealStatus;
 import org.annill.deal.repository.DealRepository;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,18 @@ public class DealService {
     }
 
 
+    public DealDtoSave saveDeal(DealDtoSave dealDtoSave) {
 
+        Optional<DealStatus> draftStatusOptional = dealStatusService.findByName("DRAFT");
+
+        if (draftStatusOptional.isPresent()) {
+            DealStatus draftStatus = draftStatusOptional.get();
+            Deal newDeal = dealConverter.toEntity(dealDtoSave);
+            newDeal.setStatus(draftStatus);
+            return dealConverter.toSaveDto(dealRepository.save(newDeal));
+        }
+
+        throw new EntityNotFoundException("Status DRAFT not found");
+    }
 
 }
