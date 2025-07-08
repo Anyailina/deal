@@ -39,7 +39,7 @@ public class DealController {
 
     @PutMapping("/save")
     public ResponseEntity<DealDtoSave> saveDeal(@RequestParam DealDtoSave dealDtoSave) {
-        return null;
+        return ResponseEntity.ok(dealService.saveDeal(dealDtoSave));
     }
 
 }
