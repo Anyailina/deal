@@ -10,7 +10,11 @@ import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.entity.Deal;
 import org.annill.deal.entity.DealStatus;
+import org.annill.deal.filter.DealSearchFilterDto;
 import org.annill.deal.repository.DealRepository;
+import org.annill.deal.spec.DealSpecifications;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -38,6 +42,11 @@ public class DealService {
         return dealRepository.findById(id)
             .filter(Deal::isActive)
             .map(dealConverter::toDto);
+    }
+
+    public Page<DealDto> searchDeals(DealSearchFilterDto filter, Pageable pageable) {
+        var spec = DealSpecifications.withFilter(filter);
+        return dealRepository.findAll(spec, pageable).map(dealConverter::toDto);
     }
 
 
