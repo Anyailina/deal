@@ -61,4 +61,5 @@ public class DealContractor {
     @OneToMany(mappedBy = "contractor")
     @EqualsAndHashCode.Exclude
     private List<ContractorToRole> contractorToRoleList;
+
 }

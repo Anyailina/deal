@@ -2,7 +2,6 @@ package org.annill.deal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -45,5 +44,6 @@ public class DealStatus {
             this.id = fullUuid.substring(0, 30);
         }
     }
+
 }
 

@@ -7,6 +7,8 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class DealSumDto {
+
     private BigDecimal sum;
     private String currency;
+
 }

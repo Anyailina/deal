@@ -1,16 +1,28 @@
 package org.annill.deal.spec;
 
-
 import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import java.util.UUID;
 import org.annill.deal.entity.Deal;
 import org.annill.deal.filter.DealSearchFilterDto;
-
 import org.springframework.data.jpa.domain.Specification;
 
-import java.util.UUID;
+/**
+ * Kласс для поиска сделок по фильтру.
+ */
+public final class DealSpecifications {
 
-public class DealSpecifications {
+    /**
+     * Приватный конструктор для предотвращения создания экземпляра утилитарного класса.
+     */
+    private DealSpecifications() {
+        throw new UnsupportedOperationException();
+    }
 
+    /**
+     * Создает спецификацию для сущности на основе переданного фильтра.
+     * @param filter фильтр для поиска сделок.
+     */
     public static Specification<Deal> withFilter(DealSearchFilterDto filter) {
         return (root, query, cb) -> {
             var p = cb.conjunction();
@@ -45,33 +57,37 @@ public class DealSpecifications {
                 p = cb.and(p, cb.lessThanOrEqualTo(root.get("closeDt"), filter.getCloseDtTo().atTime(23, 59, 59)));
             }
             if (filter.getType() != null && !filter.getType().isEmpty()) {
-                p = cb.and(p, root.get("type").in(filter.getType()));
+                p = cb.and(p, root.get("type").get("id").in(filter.getType()));
             }
             if (filter.getStatus() != null && !filter.getStatus().isEmpty()) {
-                p = cb.and(p, root.get("status").in(filter.getStatus()));
+                p = cb.and(p, root.get("status").get("id").in(filter.getStatus()));
             }
-
             if (filter.getBorrowerSearch() != null) {
-                var contractorsJoin = root.join("dealContractors", JoinType.LEFT);
+                var contractorsJoin = root.join("dealContractorList", JoinType.LEFT);
+                var contractorToRoleJoin = contractorsJoin.join("contractorToRoleList", JoinType.LEFT);
+                var roleJoin = contractorToRoleJoin.join("role", JoinType.LEFT);
+
                 p = cb.and(p,
                     cb.and(
-                        cb.equal(contractorsJoin.get("group"), "BORROWER"),
+                        cb.equal(roleJoin.get("category"), "BORROWER"),
                         cb.or(
-                            cb.like(contractorsJoin.get("contractorId").as(String.class), "%" + filter.getBorrowerSearch() + "%"),
+                            cb.like(contractorsJoin.get("contractorId"), "%" + filter.getBorrowerSearch() + "%"),
                             cb.like(contractorsJoin.get("name"), "%" + filter.getBorrowerSearch() + "%"),
                             cb.like(contractorsJoin.get("inn"), "%" + filter.getBorrowerSearch() + "%")
                         )
                     )
                 );
             }
-
             if (filter.getWarranitySearch() != null) {
-                var contractorsJoin = root.join("dealContractors", JoinType.LEFT);
+                var contractorsJoin = root.join("dealContractorList", JoinType.LEFT);
+                var contractorToRoleJoin = contractorsJoin.join("contractorToRoleList", JoinType.LEFT);
+                var roleJoin = contractorToRoleJoin.join("role", JoinType.LEFT);
+
                 p = cb.and(p,
                     cb.and(
-                        cb.equal(contractorsJoin.get("group"), "WARRANITY"),
+                        cb.equal(roleJoin.get("category"), "WARRANTY"),
                         cb.or(
-                            cb.like(contractorsJoin.get("contractorId").as(String.class), "%" + filter.getWarranitySearch() + "%"),
+                            cb.like(contractorsJoin.get("contractorId"), "%" + filter.getWarranitySearch() + "%"),
                             cb.like(contractorsJoin.get("name"), "%" + filter.getWarranitySearch() + "%"),
                             cb.like(contractorsJoin.get("inn"), "%" + filter.getWarranitySearch() + "%")
                         )
@@ -79,17 +95,28 @@ public class DealSpecifications {
                 );
             }
 
+            var sumJoin = root.join("dealSumList", JoinType.LEFT);
+
             if (filter.getSum() != null) {
-                var sumJoin = root.join("dealSums", JoinType.LEFT);
+                Predicate sumPredicate = null;
+
                 if (filter.getSum().getValue() != null) {
-                    p = cb.and(p, cb.equal(sumJoin.get("value").as(String.class), filter.getSum().getValue()));
+                    sumPredicate = cb.equal(sumJoin.get("sum"), filter.getSum().getValue());
                 }
+
                 if (filter.getSum().getCurrency() != null) {
-                    p = cb.and(p, cb.equal(sumJoin.get("currency"), filter.getSum().getCurrency()));
+                    Predicate currencyPredicate = cb.equal(sumJoin.get("currency").get("id"),
+                        filter.getSum().getCurrency());
+                    sumPredicate = (sumPredicate == null) ? currencyPredicate : cb.or(sumPredicate, currencyPredicate);
+                }
+
+                if (sumPredicate != null) {
+                    p = cb.and(p, sumPredicate);
                 }
             }
 
             return p;
         };
     }
+
 }

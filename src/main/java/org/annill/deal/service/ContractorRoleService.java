@@ -1,6 +1,5 @@
 package org.annill.deal.service;
 
-
 import lombok.AllArgsConstructor;
 import org.annill.deal.entity.ContractorRole;
 import org.annill.deal.repository.ContractorRoleRepository;

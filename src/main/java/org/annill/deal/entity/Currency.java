@@ -1,6 +1,5 @@
 package org.annill.deal.entity;
 
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -40,4 +39,5 @@ public class Currency {
             this.id = String.format("%03d", randomNum);
         }
     }
+
 }

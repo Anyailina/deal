@@ -5,17 +5,16 @@ import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
 import org.annill.deal.dto.ContractorRoleDto;
 import org.annill.deal.dto.DealContractorDto;
-import org.annill.deal.dto.DealSumDto;
 import org.annill.deal.entity.ContractorRole;
 import org.annill.deal.entity.ContractorToRole;
 import org.annill.deal.entity.DealContractor;
-import org.annill.deal.entity.DealSum;
 import org.annill.deal.service.ContractorRoleService;
 import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
 public class DealContractorConverter {
+
     private ContractorRoleService contractorRoleService;
 
     public DealContractorDto toDto(DealContractor dealContractor) {
@@ -65,4 +64,5 @@ public class DealContractorConverter {
         return entity;
 
     }
+
 }

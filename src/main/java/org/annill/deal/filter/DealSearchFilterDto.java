@@ -6,6 +6,7 @@ import lombok.Data;
 
 @Data
 public class DealSearchFilterDto {
+
     private String dealId;
     private String description;
     private String agreementNumber;
@@ -20,4 +21,5 @@ public class DealSearchFilterDto {
     private String borrowerSearch;
     private String warranitySearch;
     private SumFilter sum;
+
 }

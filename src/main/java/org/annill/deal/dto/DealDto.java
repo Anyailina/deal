@@ -7,7 +7,6 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-
 @Data
 @Accessors(chain = true)
 public class DealDto {
@@ -33,4 +32,5 @@ public class DealDto {
     private List<DealSumDto> dealSumDtoList;
 
     private List<DealContractorDto> dealContractorDtoList;
+
 }

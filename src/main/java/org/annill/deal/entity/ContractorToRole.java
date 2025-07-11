@@ -29,4 +29,5 @@ public class ContractorToRole {
 
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
+
 }

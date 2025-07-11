@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-
 @Entity
 @Data
 @Table(name = "deal_type")
@@ -40,5 +39,5 @@ public class DealType {
             this.id = fullUuid.substring(0, 30);
         }
     }
-}
 
+}

@@ -1,6 +1,5 @@
 package org.annill.deal.dto;
 
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -10,4 +9,5 @@ public class DealStatusDto {
 
     private String id;
     private String name;
+
 }

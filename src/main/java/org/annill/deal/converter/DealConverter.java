@@ -117,4 +117,5 @@ public class DealConverter {
             .setDealSumList(dealSumList)
             .setDealContractorList(dealContractorList);
     }
+
 }

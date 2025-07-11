@@ -16,4 +16,5 @@ public class DealStatusService {
         return dealStatusRepository.findFirstByName(name);
 
     }
+
 }

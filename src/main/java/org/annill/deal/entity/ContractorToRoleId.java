@@ -16,7 +16,6 @@ public class ContractorToRoleId implements Serializable {
     @Column(name = "role_id", length = 30, nullable = false)
     private String roleId;
 
-
     public ContractorToRoleId(UUID contractorId, String roleId) {
         this.contractorId = contractorId;
         this.roleId = roleId;

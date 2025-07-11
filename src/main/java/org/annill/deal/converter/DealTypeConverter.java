@@ -20,4 +20,5 @@ public class DealTypeConverter {
             .setName(dealTypeDto.getName());
 
     }
+
 }

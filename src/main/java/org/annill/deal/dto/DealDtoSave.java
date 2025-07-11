@@ -31,4 +31,5 @@ public class DealDtoSave {
     private List<DealSumDto> dealSumDtoList;
 
     private List<DealContractorDto> dealContractorDtoList;
+
 }
