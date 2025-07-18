@@ -1,0 +1,17 @@
+{
+  "id": "e4f1c2b0-8b8f-4d2a-9c76-6b1e1a32c2c9",
+  "contractorId": 101,
+  "name": "Test Contractor",
+  "inn": "1234567890",
+  "main": true,
+  "isActive": true,
+  "modifyDate": "2023-01-01T12:00:00",
+  "roles": [
+    {
+      "id": "550e8400-e29b-41d4-a716-446655440001",
+      "name": "SUPPLIER"
+    }
+  ]
+}
+
+

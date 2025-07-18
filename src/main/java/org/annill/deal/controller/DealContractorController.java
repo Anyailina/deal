@@ -1,5 +1,6 @@
 package org.annill.deal.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.annill.deal.dto.DealContractorDto;
@@ -20,6 +21,7 @@ public class DealContractorController {
     private DealContractorService dealContractorService;
 
     @PutMapping("/save")
+    @Operation(summary = "Сохранение контрагента")
     public ResponseEntity<DealContractorDto> save(@RequestBody DealContractorDto contractor) {
         log.info("Сохранение контрагента");
         DealContractorDto savedContractor = dealContractorService.saveOrUpdate(contractor);
@@ -27,6 +29,7 @@ public class DealContractorController {
     }
 
     @DeleteMapping("/delete")
+    @Operation(summary = "Удаление контрагента")
     public void delete(@RequestBody DealContractorDto contractor) {
         log.info("Удаление контрагента");
         dealContractorService.delete(contractor);
