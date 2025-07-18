@@ -2,6 +2,7 @@ package org.annill.deal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -11,6 +12,8 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.annill.deal.ShortUUIDGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "deal_status")
@@ -19,7 +22,11 @@ import lombok.experimental.Accessors;
 public class DealStatus {
 
     @Id
-    @Column(length = 3, nullable = false)
+    @GeneratedValue(generator = "short_uuid")
+    @GenericGenerator(
+        name = "short_uuid",
+        type = ShortUUIDGenerator.class
+    )
     private String id;
 
     @Column(nullable = false)
@@ -35,14 +42,6 @@ public class DealStatus {
 
     public DealStatus() {
 
-    }
-
-    @PrePersist
-    public void generateId() {
-        if (this.id == null) {
-            String fullUuid = UUID.randomUUID().toString().replace("-", "");
-            this.id = fullUuid.substring(0, 30);
-        }
     }
 
 }

@@ -2,6 +2,7 @@ package org.annill.deal.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
@@ -11,6 +12,8 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.annill.deal.ShortUUIDGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "currency")
@@ -19,7 +22,11 @@ import lombok.experimental.Accessors;
 public class Currency {
 
     @Id
-    @Column(length = 3, nullable = false)
+    @GeneratedValue(generator = "short_uuid")
+    @GenericGenerator(
+        name = "short_uuid",
+        type = ShortUUIDGenerator.class
+    )
     private String id;
 
     @Column(nullable = false)
@@ -32,12 +39,6 @@ public class Currency {
     @EqualsAndHashCode.Exclude
     private List<DealSum> dealSumList;
 
-    @PrePersist
-    public void generateId() {
-        if (this.id == null) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 1000);
-            this.id = String.format("%03d", randomNum);
-        }
-    }
+
 
 }
