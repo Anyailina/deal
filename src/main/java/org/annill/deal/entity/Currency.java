@@ -5,10 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -38,7 +36,6 @@ public class Currency {
     @OneToMany(mappedBy = "currency")
     @EqualsAndHashCode.Exclude
     private List<DealSum> dealSumList;
-
 
 
 }

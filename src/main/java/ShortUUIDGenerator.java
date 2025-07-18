@@ -1,4 +1,5 @@
 package org.annill.deal;
+
 import java.util.UUID;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
