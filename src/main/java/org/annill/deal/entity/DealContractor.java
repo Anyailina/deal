@@ -23,7 +23,7 @@ import lombok.experimental.Accessors;
 public class DealContractor {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
     private UUID id;
 
