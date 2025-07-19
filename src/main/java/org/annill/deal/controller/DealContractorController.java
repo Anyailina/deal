@@ -30,9 +30,9 @@ public class DealContractorController {
 
     @DeleteMapping("/delete")
     @Operation(summary = "Удаление контрагента")
-    public void delete(@RequestBody DealContractorDto contractor) {
+    public ResponseEntity<Void> delete(@RequestBody DealContractorDto contractor) {
         log.info("Удаление контрагента");
         dealContractorService.delete(contractor);
+        return ResponseEntity.ok().build();
     }
-
 }
