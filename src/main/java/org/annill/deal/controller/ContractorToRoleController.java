@@ -1,5 +1,6 @@
 package org.annill.deal.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.annill.deal.dto.ContractorToRoleDto;
@@ -25,12 +26,14 @@ public class ContractorToRoleController {
     private ContractorToRoleService contractorToRoleService;
 
     @PutMapping("/save")
+    @Operation(summary ="Добавления роли существующему контрагенту сделки" )
     public void save(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Добавления роли существующему контрагенту сделки");
         contractorToRoleService.save(contractorToRoleDto);
     }
 
     @DeleteMapping("/delete")
+    @Operation(summary ="Удаление роли у существующего контрагента сделки" )
     public void delete(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Удаление роли у существующего контрагента сделки");
         contractorToRoleService.delete(contractorToRoleDto);

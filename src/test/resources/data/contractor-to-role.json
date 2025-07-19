@@ -1,0 +1,25 @@
+{
+  "dealContractorDto": {
+    "id": "a8f6b67e-3b1a-4a3d-9c2b-1d2e3f4a5b6c",
+    "contractorId": "CTR-1001",
+    "name": "ООО 'СтройИнвест'",
+    "main": true,
+    "contractorRoleDtoList": [
+      {
+        "id": "role-1",
+        "name": "Генеральный подрядчик",
+        "category": "construction"
+      },
+      {
+        "id": "role-2",
+        "name": "Поставщик материалов",
+        "category": "supplier"
+      }
+    ]
+  },
+  "contractorRoleDto": {
+    "id": "role-3",
+    "name": "Технический заказчик",
+    "category": "management"
+  }
+}
