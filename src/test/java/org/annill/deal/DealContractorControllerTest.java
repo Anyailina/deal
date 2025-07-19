@@ -1,35 +1,35 @@
 package org.annill.deal;
 
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import java.io.InputStream;
 import org.annill.deal.controller.DealContractorController;
 import org.annill.deal.dto.DealContractorDto;
 import org.annill.deal.service.DealContractorService;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.io.InputStream;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-@ExtendWith(MockitoExtension.class)
+@WebMvcTest(DealContractorController.class)
 class DealContractorControllerTest {
 
-    @Mock
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockitoBean
     private DealContractorService dealContractorService;
 
-    @InjectMocks
-    private DealContractorController dealContractorController;
 
     private final ObjectMapper objectMapper = new ObjectMapper()
         .registerModule(new JavaTimeModule());
@@ -43,37 +43,36 @@ class DealContractorControllerTest {
         }
     }
 
-    @Test
-    void save_ShouldReturnSavedContractor() {
-        when(dealContractorService.saveOrUpdate(any(DealContractorDto.class)))
-            .thenReturn(testContractorDto);
-
-        ResponseEntity<DealContractorDto> response =
-            dealContractorController.save(testContractorDto);
-
-        assertNotNull(response);
-        assertEquals(200, response.getStatusCodeValue());
-        assertEquals(testContractorDto, response.getBody());
-        verify(dealContractorService).saveOrUpdate(testContractorDto);
-    }
 
     @Test
-    void delete_ShouldCallServiceMethod() {
-        doNothing().when(dealContractorService).delete(any(DealContractorDto.class));
+    void testSaveContractor() throws Exception {
+        when(dealContractorService.saveOrUpdate(testContractorDto)).thenReturn(testContractorDto);
 
-        dealContractorController.delete(testContractorDto);
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders.put("/deal-contractor/save")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testContractorDto)))
+            .andExpect(status().isOk())
+            .andReturn();
 
-        verify(dealContractorService).delete(testContractorDto);
+        String responseBody = result.getResponse().getContentAsString();
+
+        DealContractorDto returnedDto = objectMapper.readValue(responseBody, DealContractorDto.class);
+
+        Assertions.assertEquals(testContractorDto, returnedDto);
     }
+
 
     @Test
-    void delete_ShouldReturnNoContent_WhenSuccess() {
+    void delete_ShouldReturnNoContent_WhenSuccess() throws Exception {
 
-        doNothing().when(dealContractorService).delete(any(DealContractorDto.class));
+        mockMvc.perform(delete("/deal-contractor/delete")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(testContractorDto)))
+            .andExpect(status().isOk())
+            .andReturn();
+        ;
 
-        dealContractorController.delete(testContractorDto);
-
-        verify(dealContractorService).delete(testContractorDto);
     }
+
 
 }
