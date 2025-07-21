@@ -1,0 +1,13 @@
+{
+  "dealContractorDto": {
+    "id": "a8f6b67e-3b1a-4a3d-9c2b-1d2e3f4a5b6c",
+    "contractorId": "CTR-2023-001",
+    "name": "ООО 'СтройГарант'",
+    "main": true
+  },
+  "contractorRoleDto": {
+    "id": "GEN_CONTRACTOR",
+    "name": "Генеральный подрядчик",
+    "category": "construction"
+  }
+}

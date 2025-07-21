@@ -12,10 +12,12 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "contractor_role")
 @Data
+@Accessors(chain = true)
 public class ContractorRole {
 
     @Id
