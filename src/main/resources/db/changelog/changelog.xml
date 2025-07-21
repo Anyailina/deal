@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+    <include file="sql/V1_create_contractor_role.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V2_create_currency.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V3_create_deal_status.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V4_create_deal_type.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V5_create_deal.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V6_create_deal_sum.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V7_create_deal_contractor.sql" relativeToChangelogFile="true"/>
+    <include file="sql/V8_create_contractor_to_role.sql" relativeToChangelogFile="true"/>
+
+
+    <changeSet id="load_contractor_role" author="anailina">
+        <loadData
+          tableName="contractor_role"
+          file="db/changelog/data/contractor_role.csv"
+          separator=";"
+        />
+    </changeSet>
+    <changeSet id="load_currency-data" author="anailina">
+        <loadData
+          tableName="currency"
+          file="db/changelog/data/currency.csv"
+          separator=";"
+        />
+    </changeSet>
+    <changeSet id="load_deal_status" author="anailina">
+        <loadData
+          tableName="deal_status"
+          file="db/changelog/data/deal_status.csv"
+          separator=";"
+        />
+    </changeSet>
+    <changeSet id="load_deal_type" author="anailina">
+        <loadData
+          tableName="deal_status"
+          file="db/changelog/data/deal_type.csv"
+          separator=";"
+        />
+    </changeSet>
+</databaseChangeLog>
