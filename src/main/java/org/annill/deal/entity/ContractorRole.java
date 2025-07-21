@@ -6,10 +6,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
@@ -22,7 +20,6 @@ public class ContractorRole {
 
     @Id
     @Column(length = 30, nullable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String id;
 
     @Column(nullable = false)
@@ -37,13 +34,5 @@ public class ContractorRole {
     @OneToMany(mappedBy = "role")
     @EqualsAndHashCode.Exclude
     private List<ContractorToRole> contractorToRoleList;
-
-    @PrePersist
-    public void generateId() {
-        if (this.id == null) {
-            String fullUuid = UUID.randomUUID().toString().replace("-", "");
-            this.id = fullUuid.substring(0, 30);
-        }
-    }
 
 }

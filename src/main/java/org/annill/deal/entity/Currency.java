@@ -6,13 +6,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import org.annill.deal.ShortUUIDGenerator;
+import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "currency")
@@ -35,12 +35,5 @@ public class Currency {
     @EqualsAndHashCode.Exclude
     private List<DealSum> dealSumList;
 
-    @PrePersist
-    public void generateId() {
-        if (this.id == null) {
-            int randomNum = ThreadLocalRandom.current().nextInt(0, 1000);
-            this.id = String.format("%03d", randomNum);
-        }
-    }
 
 }
