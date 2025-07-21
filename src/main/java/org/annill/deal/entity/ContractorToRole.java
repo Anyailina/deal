@@ -8,10 +8,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.MapsId;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Entity
 @Table(name = "contractor_to_role")
 @Data
+@Accessors(chain = true)
 public class ContractorToRole {
 
     @EmbeddedId

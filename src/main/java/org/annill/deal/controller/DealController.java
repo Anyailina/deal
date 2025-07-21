@@ -1,5 +1,6 @@
 package org.annill.deal.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import java.io.IOException;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -44,6 +45,7 @@ public class DealController {
      * @param newStatus Новый статус сделки.
      */
     @PatchMapping("/change/status")
+    @Operation(summary = "Изменить статус сделки", description = "Изменяет статус сделки по её ID")
     public ResponseEntity<DealDto> changeDealStatus(@RequestParam UUID dealId,
         @RequestParam String newStatus) {
         log.info("Изменение статуса сделки");
@@ -58,6 +60,7 @@ public class DealController {
      * @param id ID сделки.
      */
     @GetMapping("/{id}")
+    @Operation(summary = "Получить сделку по ID", description = "Возвращает сделку по её идентификатору")
     public ResponseEntity<DealDto> getDeal(@PathVariable UUID id) {
         log.info("Получение сделки");
         return dealService.getById(id)
@@ -71,6 +74,7 @@ public class DealController {
      * @param dealDtoSave DTO для сохранения сделки.
      */
     @PutMapping("/save")
+    @Operation(summary = "Сохранить сделку", description = "Сохраняет новую сделку в системе")
     public ResponseEntity<DealDtoSave> saveDeal(@RequestBody DealDtoSave dealDtoSave) {
         log.info("Сохранение сделки");
         return ResponseEntity.ok(dealService.saveDeal(dealDtoSave));
@@ -83,6 +87,7 @@ public class DealController {
      * @param pageable Параметры пагинации.
      */
     @PostMapping("/search")
+    @Operation(summary = "Поиск сделок", description = "Ищет сделки по фильтру с пагинацией")
     public PageResponse<DealDto> searchDeals(@RequestBody DealSearchFilterDto filter, Pageable pageable) {
         log.info("Поиск сделки");
         Page<DealDto> page = dealService.searchDeals(filter, pageable);
@@ -96,6 +101,7 @@ public class DealController {
      * @param pageable Параметры пагинации.
      */
     @PostMapping("/search/export")
+    @Operation(summary = "Экспорт сделок в Excel", description = "Экспортирует список сделок в Excel файл")
     public ResponseEntity<ByteArrayResource> exportDeals(@RequestBody DealSearchFilterDto filter, Pageable pageable)
         throws IOException {
         log.info("Экспорт сделки");
