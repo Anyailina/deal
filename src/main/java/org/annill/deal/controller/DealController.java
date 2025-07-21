@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.annill.deal.PageResponse;
+import org.annill.deal.page.PageResponse;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.filter.DealSearchFilterDto;
