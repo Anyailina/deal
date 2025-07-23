@@ -8,6 +8,10 @@ spring:
   application:
     name: deal
 
+
+  jwt:
+    jwtSecret: "verysecretkey-should-be-at-least-256-bits-long!"
+
   jpa:
     hibernate:
       ddl-auto: none
@@ -18,3 +22,5 @@ spring:
     user: ${spring.datasource.username}
     password: ${spring.datasource.password}
     url: ${spring.datasource.url}
+server:
+  port: 8081

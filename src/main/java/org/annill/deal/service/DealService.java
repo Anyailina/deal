@@ -24,6 +24,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 /**
@@ -73,8 +75,34 @@ public class DealService {
      * @param pageable объект пагинации {@link Pageable}.
      */
     public Page<DealDto> searchDeals(DealSearchFilterDto filter, Pageable pageable) {
-        var spec = DealSpecifications.withFilter(filter);
+        Specification<Deal> spec = DealSpecifications.withFilter(filter);
         return dealRepository.findAll(spec, pageable).map(dealConverter::toDto);
+    }
+
+    /**
+     * Выполняет поиск сделок по фильтру с постраничной выдачей с фильтрацией по ролям.
+     *
+     * @param filter   объект фильтра {@link DealSearchFilterDto}.
+     * @param pageable объект пагинации {@link Pageable}.
+     * @param authentication объект Authentication {@link Authentication}.
+     */
+    public Page<DealDto> searchDeals(DealSearchFilterDto filter, Pageable pageable, Authentication authentication) {
+
+        boolean isCreditUser = hasAuthority(authentication);
+
+        String statusFilter = isCreditUser ? "CREDIT" : "OVERDRAFT";
+
+        Specification<Deal> spec = DealSpecifications.withFilter(filter, statusFilter);
+        return dealRepository.findAll(spec, pageable)
+            .map(dealConverter::toDto);
+    }
+
+    private boolean hasAuthority(Authentication authentication) {
+        if (authentication == null || authentication.getAuthorities() == null) {
+            return false;
+        }
+        return authentication.getAuthorities().stream()
+            .anyMatch(a -> "ROLE_CREDIT_USER".equals(a.getAuthority()));
     }
 
     /**
@@ -82,7 +110,6 @@ public class DealService {
      *
      * @param filter   фильтр поиска сделок.
      * @param pageable параметры пагинации.
-
      */
     public byte[] exportDeals(DealSearchFilterDto filter, Pageable pageable) throws IOException {
         var spec = DealSpecifications.withFilter(filter);
@@ -171,6 +198,7 @@ public class DealService {
 
     /**
      * Сохраняет новую сделку со статусом DRAFT.
+     *
      * @param dealDtoSave DTO для сохранения сделки.
      */
     public DealDtoSave saveDeal(DealDtoSave dealDtoSave) {
