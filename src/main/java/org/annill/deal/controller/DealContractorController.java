@@ -35,4 +35,5 @@ public class DealContractorController {
         dealContractorService.delete(contractor);
         return ResponseEntity.ok().build();
     }
+
 }
