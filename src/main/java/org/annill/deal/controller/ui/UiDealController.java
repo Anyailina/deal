@@ -47,6 +47,7 @@ public class UiDealController {
      * @return ResponseEntity с обновленной сделкой
      */
     @PatchMapping("/change/status")
+    @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<DealDto> changeDealStatus(@RequestParam UUID dealId,
         @RequestParam String newStatus) {
         log.info("Изменяет статус сделки. Сделка ID: {}, Статус: {}", dealId, newStatus);
@@ -60,7 +61,7 @@ public class UiDealController {
      * @return ResponseEntity с найденной сделкой
      */
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('USER','CREDIT_USER', 'OVERDRAFT_USER')")
+    @PreAuthorize("hasAnyRole('USER','CREDIT_USER', 'OVERDRAFT_USER','DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<DealDto> getDeal(@PathVariable UUID id) {
         log.info("Получение сделки по ID: {}", id);
         return dealController.getDeal(id);
