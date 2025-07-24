@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/deal")
 @AllArgsConstructor
-public class DealController {
+public class DealController implements DealApi {
 
     private DealService dealService;
 

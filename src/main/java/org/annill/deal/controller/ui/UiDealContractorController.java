@@ -2,7 +2,7 @@ package org.annill.deal.controller.ui;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.annill.deal.controller.DealContractorController;
+import org.annill.deal.controller.DealContractorApi;
 import org.annill.deal.dto.DealContractorDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UiDealContractorController {
 
-    private final DealContractorController dealContractorController;
+    private final DealContractorApi dealContractorController;
 
     /**
      * Сохраняет контрагента сделки.

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.annill.deal.converter.DealConverter;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
@@ -32,12 +32,13 @@ import org.springframework.stereotype.Service;
  * Предоставляет методы для смены статуса сделки, поиска, сохранения и экспорта в Excel.
  */
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class DealService {
 
-    private DealStatusService dealStatusService;
-    private DealRepository dealRepository;
-    private DealConverter dealConverter;
+    private final DealStatusService dealStatusService;
+    private final DealRepository dealRepository;
+    private final DealConverter dealConverter;
+    private String role = "ROLE_CREDIT_USER";
 
     /**
      * Меняет статус сделки по идентификатору.
@@ -82,27 +83,28 @@ public class DealService {
     /**
      * Выполняет поиск сделок по фильтру с постраничной выдачей с фильтрацией по ролям.
      *
-     * @param filter   объект фильтра {@link DealSearchFilterDto}.
-     * @param pageable объект пагинации {@link Pageable}.
+     * @param filter         объект фильтра {@link DealSearchFilterDto}.
+     * @param pageable       объект пагинации {@link Pageable}.
      * @param authentication объект Authentication {@link Authentication}.
      */
     public Page<DealDto> searchDeals(DealSearchFilterDto filter, Pageable pageable, Authentication authentication) {
 
-        boolean isCreditUser = hasAuthority(authentication);
-
-        String statusFilter = isCreditUser ? "CREDIT" : "OVERDRAFT";
+        boolean isCreditUser = hasAuthority(authentication, role);
+        String credit = "CREDIT";
+        String overdraft = "OVERDRAFT";
+        String statusFilter = isCreditUser ? credit : overdraft;
 
         Specification<Deal> spec = DealSpecifications.withFilter(filter, statusFilter);
         return dealRepository.findAll(spec, pageable)
             .map(dealConverter::toDto);
     }
 
-    private boolean hasAuthority(Authentication authentication) {
+    private boolean hasAuthority(Authentication authentication, String role) {
         if (authentication == null || authentication.getAuthorities() == null) {
             return false;
         }
         return authentication.getAuthorities().stream()
-            .anyMatch(a -> "ROLE_CREDIT_USER".equals(a.getAuthority()));
+            .anyMatch(a -> role.equals(a.getAuthority()));
     }
 
     /**

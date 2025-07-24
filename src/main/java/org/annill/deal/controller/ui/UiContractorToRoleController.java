@@ -2,6 +2,7 @@ package org.annill.deal.controller.ui;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.annill.deal.controller.ContractorToRoleApi;
 import org.annill.deal.controller.ContractorToRoleController;
 import org.annill.deal.dto.ContractorToRoleDto;
 import org.springframework.http.ResponseEntity;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UiContractorToRoleController {
 
-    private final ContractorToRoleController contractorToRoleController;
+    private final ContractorToRoleApi contractorToRoleController;
 
     /**
      * Сохраняет связь контрагента с ролью.

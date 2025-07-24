@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/contractor-to-role")
 @AllArgsConstructor
-public class ContractorToRoleController {
+public class ContractorToRoleController implements ContractorToRoleApi {
 
     private ContractorToRoleService contractorToRoleService;
 

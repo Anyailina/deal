@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.annill.deal.controller.DealController;
+import org.annill.deal.controller.DealApi;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.filter.DealSearchFilterDto;
@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UiDealController {
 
-    private final DealController dealController;
+    private final DealApi dealController;
     private final DealService dealService;
 
     /**

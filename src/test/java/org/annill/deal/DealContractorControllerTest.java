@@ -9,6 +9,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.InputStream;
 import org.annill.deal.controller.DealContractorController;
 import org.annill.deal.dto.DealContractorDto;
+import org.annill.deal.security.JwtUtils;
 import org.annill.deal.service.DealContractorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -31,6 +32,8 @@ class DealContractorControllerTest {
 
     @MockitoBean
     private DealContractorService dealContractorService;
+    @MockitoBean
+    //private JwtUtils jwtUtils;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper()
