@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.annill.deal.controller.DealContractorApi;
 import org.annill.deal.dto.DealContractorDto;
+import org.annill.deal.service.DealContractorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,9 +21,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("ui/deal-contractor")
 @RequiredArgsConstructor
 @Slf4j
-public class UiDealContractorController {
+public class UiDealContractorController implements DealContractorApi {
 
-    private final DealContractorApi dealContractorController;
+    private final DealContractorService dealContractorService;
 
     /**
      * Сохраняет контрагента сделки.
@@ -34,7 +35,7 @@ public class UiDealContractorController {
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<DealContractorDto> save(@RequestBody DealContractorDto contractor) {
         log.info("Сохранение контрагента {}", contractor);
-        return dealContractorController.save(contractor);
+        return ResponseEntity.ok(dealContractorService.saveOrUpdate(contractor));
     }
 
     /**
@@ -47,7 +48,8 @@ public class UiDealContractorController {
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<Void> delete(@RequestBody DealContractorDto contractor) {
         log.info("Удаление контрагента: {}", contractor);
-        return dealContractorController.delete(contractor);
+        dealContractorService.delete(contractor);
+        return ResponseEntity.ok().build();
     }
 
 }

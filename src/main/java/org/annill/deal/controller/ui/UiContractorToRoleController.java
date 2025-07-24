@@ -3,8 +3,8 @@ package org.annill.deal.controller.ui;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.annill.deal.controller.ContractorToRoleApi;
-import org.annill.deal.controller.ContractorToRoleController;
 import org.annill.deal.dto.ContractorToRoleDto;
+import org.annill.deal.service.ContractorToRoleService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,16 +14,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Контроллер для управления связями контрагентов с ролями через UI.
- * Предоставляет endpoints для сохранения и удаления связей контрагент-роль.
+ * Контроллер для управления связями контрагентов с ролями через UI. Предоставляет endpoints для сохранения и удаления
+ * связей контрагент-роль.
  */
 @RestController
 @RequestMapping("ui/contractor-to-role")
 @RequiredArgsConstructor
 @Slf4j
-public class UiContractorToRoleController {
+public class UiContractorToRoleController implements ContractorToRoleApi {
 
-    private final ContractorToRoleApi contractorToRoleController;
+    private final ContractorToRoleService contractorToRoleService;
 
     /**
      * Сохраняет связь контрагента с ролью.
@@ -35,7 +35,8 @@ public class UiContractorToRoleController {
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<?> save(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Сохраняет связь контрагента с ролью: {}", contractorToRoleDto);
-        return contractorToRoleController.save(contractorToRoleDto);
+        contractorToRoleService.save(contractorToRoleDto);
+        return ResponseEntity.ok().build();
     }
 
     /**
@@ -48,7 +49,8 @@ public class UiContractorToRoleController {
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
     public ResponseEntity<?> delete(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Удаляет связь контрагента с ролью.: {}", contractorToRoleDto);
-        return contractorToRoleController.delete(contractorToRoleDto);
+        contractorToRoleService.delete(contractorToRoleDto);
+        return ResponseEntity.ok().build();
     }
 
 }

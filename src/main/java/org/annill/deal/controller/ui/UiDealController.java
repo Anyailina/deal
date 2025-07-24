@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.annill.deal.controller.DealApi;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.filter.DealSearchFilterDto;
@@ -14,6 +13,8 @@ import org.annill.deal.service.DealService;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
@@ -36,7 +37,6 @@ import org.springframework.web.bind.annotation.RestController;
 @Slf4j
 public class UiDealController {
 
-    private final DealApi dealController;
     private final DealService dealService;
 
     /**
@@ -48,10 +48,13 @@ public class UiDealController {
      */
     @PatchMapping("/change/status")
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
+    @Operation(summary = "Изменить статус сделки", description = "Изменяет статус сделки по её ID")
     public ResponseEntity<DealDto> changeDealStatus(@RequestParam UUID dealId,
         @RequestParam String newStatus) {
-        log.info("Изменяет статус сделки. Сделка ID: {}, Статус: {}", dealId, newStatus);
-        return dealController.changeDealStatus(dealId, newStatus);
+        log.info("Изменение статуса сделки");
+        return dealService.changeStatus(dealId, newStatus)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
@@ -62,9 +65,12 @@ public class UiDealController {
      */
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('USER','CREDIT_USER', 'OVERDRAFT_USER','DEAL_SUPERUSER', 'SUPERUSER')")
+    @Operation(summary = "Получить сделку по ID", description = "Возвращает сделку по её идентификатору")
     public ResponseEntity<DealDto> getDeal(@PathVariable UUID id) {
-        log.info("Получение сделки по ID: {}", id);
-        return dealController.getDeal(id);
+        log.info("Получение сделки");
+        return dealService.getById(id)
+            .map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     /**
@@ -75,9 +81,10 @@ public class UiDealController {
      */
     @PutMapping("/save")
     @PreAuthorize("hasAnyRole('DEAL_SUPERUSER', 'SUPERUSER')")
+    @Operation(summary = "Сохранить сделку", description = "Сохраняет новую сделку в системе")
     public ResponseEntity<DealDtoSave> saveDeal(@RequestBody DealDtoSave dealDtoSave) {
-        log.info("Сохранение сделки: {}", dealDtoSave);
-        return dealController.saveDeal(dealDtoSave);
+        log.info("Сохранение сделки");
+        return ResponseEntity.ok(dealService.saveDeal(dealDtoSave));
     }
 
     /**
@@ -110,8 +117,16 @@ public class UiDealController {
     @Operation(summary = "Экспорт сделок в Excel", description = "Экспортирует список сделок в Excel файл")
     public ResponseEntity<ByteArrayResource> exportDeals(@RequestBody DealSearchFilterDto filter, Pageable pageable)
         throws IOException {
-        log.info("Экспортирует сделки в Excel. Фильтр: {}, страница: {}", filter, pageable);
-        return dealController.exportDeals(filter, pageable);
+        log.info("Экспорт сделки");
+        byte[] excelBytes = dealService.exportDeals(filter, pageable);
+
+        ByteArrayResource resource = new ByteArrayResource(excelBytes);
+
+        return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=deals.xlsx")
+            .contentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+            .contentLength(excelBytes.length)
+            .body(resource);
     }
 
 }
