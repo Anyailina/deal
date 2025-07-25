@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/deal-contractor")
 @AllArgsConstructor
-public class DealContractorController {
+public class DealContractorController implements DealContractorApi {
 
     private DealContractorService dealContractorService;
 
@@ -35,4 +35,5 @@ public class DealContractorController {
         dealContractorService.delete(contractor);
         return ResponseEntity.ok().build();
     }
+
 }

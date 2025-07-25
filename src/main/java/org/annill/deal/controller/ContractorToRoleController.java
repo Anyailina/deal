@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.annill.deal.dto.ContractorToRoleDto;
 import org.annill.deal.service.ContractorToRoleService;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,22 +22,24 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/contractor-to-role")
 @AllArgsConstructor
-public class ContractorToRoleController {
+public class ContractorToRoleController implements ContractorToRoleApi {
 
     private ContractorToRoleService contractorToRoleService;
 
     @PutMapping("/save")
-    @Operation(summary ="Добавления роли существующему контрагенту сделки" )
-    public void save(@RequestBody ContractorToRoleDto contractorToRoleDto) {
+    @Operation(summary = "Добавления роли существующему контрагенту сделки")
+    public ResponseEntity<?> save(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Добавления роли существующему контрагенту сделки");
         contractorToRoleService.save(contractorToRoleDto);
+        return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("/delete")
-    @Operation(summary ="Удаление роли у существующего контрагента сделки" )
-    public void delete(@RequestBody ContractorToRoleDto contractorToRoleDto) {
+    @Operation(summary = "Удаление роли у существующего контрагента сделки")
+    public ResponseEntity<?> delete(@RequestBody ContractorToRoleDto contractorToRoleDto) {
         log.info("Удаление роли у существующего контрагента сделки");
         contractorToRoleService.delete(contractorToRoleDto);
+        return ResponseEntity.ok().build();
     }
 
 }

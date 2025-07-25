@@ -1,4 +1,4 @@
-package org.annill.deal;
+package org.annill.deal.page;
 
 import java.util.List;
 import org.springframework.data.domain.Page;

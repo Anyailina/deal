@@ -11,8 +11,6 @@ import java.util.List;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import org.annill.deal.ShortUUIDGenerator;
-import org.hibernate.annotations.GenericGenerator;
 
 @Entity
 @Table(name = "currency")

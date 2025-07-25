@@ -16,6 +16,7 @@ import org.annill.deal.controller.DealController;
 import org.annill.deal.dto.DealDto;
 import org.annill.deal.dto.DealDtoSave;
 import org.annill.deal.filter.DealSearchFilterDto;
+import org.annill.deal.page.PageResponse;
 import org.annill.deal.service.DealService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

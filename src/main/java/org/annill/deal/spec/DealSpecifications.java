@@ -1,5 +1,6 @@
 package org.annill.deal.spec;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Predicate;
 import java.util.UUID;
@@ -21,9 +22,19 @@ public final class DealSpecifications {
 
     /**
      * Создает спецификацию для сущности на основе переданного фильтра.
+     *
      * @param filter фильтр для поиска сделок.
      */
     public static Specification<Deal> withFilter(DealSearchFilterDto filter) {
+        return withFilter(filter, null);
+    }
+
+    /**
+     * Создает спецификацию для сущности на основе переданного фильтра с фильтрацией по статусу
+     *
+     * @param filter фильтр для поиска сделок.
+     */
+    public static Specification<Deal> withFilter(DealSearchFilterDto filter, @Nullable String statusName) {
         return (root, query, cb) -> {
             var p = cb.conjunction();
 
@@ -62,37 +73,28 @@ public final class DealSpecifications {
             if (filter.getStatus() != null && !filter.getStatus().isEmpty()) {
                 p = cb.and(p, root.get("status").get("id").in(filter.getStatus()));
             }
+            if (statusName != null && !statusName.isEmpty()) {
+                p = cb.and(p, cb.equal(root.get("status").get("name"), statusName));
+            }
             if (filter.getBorrowerSearch() != null) {
                 var contractorsJoin = root.join("dealContractorList", JoinType.LEFT);
                 var contractorToRoleJoin = contractorsJoin.join("contractorToRoleList", JoinType.LEFT);
                 var roleJoin = contractorToRoleJoin.join("role", JoinType.LEFT);
 
-                p = cb.and(p,
-                    cb.and(
-                        cb.equal(roleJoin.get("category"), "BORROWER"),
-                        cb.or(
-                            cb.like(contractorsJoin.get("contractorId"), "%" + filter.getBorrowerSearch() + "%"),
-                            cb.like(contractorsJoin.get("name"), "%" + filter.getBorrowerSearch() + "%"),
-                            cb.like(contractorsJoin.get("inn"), "%" + filter.getBorrowerSearch() + "%")
-                        )
-                    )
-                );
+                p = cb.and(p, cb.and(cb.equal(roleJoin.get("category"), "BORROWER"),
+                    cb.or(cb.like(contractorsJoin.get("contractorId"), "%" + filter.getBorrowerSearch() + "%"),
+                        cb.like(contractorsJoin.get("name"), "%" + filter.getBorrowerSearch() + "%"),
+                        cb.like(contractorsJoin.get("inn"), "%" + filter.getBorrowerSearch() + "%"))));
             }
             if (filter.getWarranitySearch() != null) {
                 var contractorsJoin = root.join("dealContractorList", JoinType.LEFT);
                 var contractorToRoleJoin = contractorsJoin.join("contractorToRoleList", JoinType.LEFT);
                 var roleJoin = contractorToRoleJoin.join("role", JoinType.LEFT);
 
-                p = cb.and(p,
-                    cb.and(
-                        cb.equal(roleJoin.get("category"), "WARRANTY"),
-                        cb.or(
-                            cb.like(contractorsJoin.get("contractorId"), "%" + filter.getWarranitySearch() + "%"),
-                            cb.like(contractorsJoin.get("name"), "%" + filter.getWarranitySearch() + "%"),
-                            cb.like(contractorsJoin.get("inn"), "%" + filter.getWarranitySearch() + "%")
-                        )
-                    )
-                );
+                p = cb.and(p, cb.and(cb.equal(roleJoin.get("category"), "WARRANTY"),
+                    cb.or(cb.like(contractorsJoin.get("contractorId"), "%" + filter.getWarranitySearch() + "%"),
+                        cb.like(contractorsJoin.get("name"), "%" + filter.getWarranitySearch() + "%"),
+                        cb.like(contractorsJoin.get("inn"), "%" + filter.getWarranitySearch() + "%"))));
             }
 
             var sumJoin = root.join("dealSumList", JoinType.LEFT);
