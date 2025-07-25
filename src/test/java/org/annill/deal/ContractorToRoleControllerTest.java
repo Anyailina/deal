@@ -12,21 +12,26 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import org.annill.deal.controller.ContractorToRoleController;
 import org.annill.deal.dto.ContractorToRoleDto;
+import org.annill.deal.security.AuthTokenFilter;
 import org.annill.deal.service.ContractorToRoleService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 @WebMvcTest(ContractorToRoleController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class ContractorToRoleControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
+    @MockitoBean
+    private AuthTokenFilter authTokenFilter;
 
     @MockitoBean
     private ContractorToRoleService contractorToRoleService;

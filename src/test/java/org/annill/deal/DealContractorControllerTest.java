@@ -9,12 +9,14 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import java.io.InputStream;
 import org.annill.deal.controller.DealContractorController;
 import org.annill.deal.dto.DealContractorDto;
+import org.annill.deal.security.AuthTokenFilter;
 import org.annill.deal.security.JwtUtils;
 import org.annill.deal.service.DealContractorService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -25,6 +27,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 @WebMvcTest(DealContractorController.class)
+@AutoConfigureMockMvc(addFilters = false)
 class DealContractorControllerTest {
 
     @Autowired
@@ -32,8 +35,9 @@ class DealContractorControllerTest {
 
     @MockitoBean
     private DealContractorService dealContractorService;
+
     @MockitoBean
-    //private JwtUtils jwtUtils;
+    private AuthTokenFilter authTokenFilter;
 
 
     private final ObjectMapper objectMapper = new ObjectMapper()
